@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDAO {
-    public Message createAccount(Message message) {
+    public Message createMessage(Message message) {
         Connection connection = ConnectionUtil.getConnection(); 
         try {
             String sql = "INSERT INTO message (posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?)"; 
