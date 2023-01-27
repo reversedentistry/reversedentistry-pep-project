@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDAO {
+    //Create new account
     public Account createAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection(); 
         try {
@@ -26,5 +27,25 @@ public class AccountDAO {
             System.out.println(e.getMessage()); 
         }
         return null; 
+    }
+
+    // Retrieve account by ID
+    public Account getAccount(int accountId) {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "SELECT * FROM account WHERE account_id = ?"; 
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, accountId);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                Account account = new Account(rs.getInt("account_id"),
+                        rs.getString("username"),
+                        rs.getString("password")); 
+                return account;
+            }
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+    }
+    return null; 
     }
 }
