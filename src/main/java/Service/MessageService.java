@@ -5,6 +5,8 @@ import DAO.AccountDAO;
 import Model.Message;
 // import Model.Account;
 
+import java.util.List;
+
 public class MessageService {
     public MessageDAO messageDAO; 
     public AccountDAO accountDAO; 
@@ -19,6 +21,10 @@ public class MessageService {
         this.accountDAO = accountDAO; 
     }
 
+    public List<Message> getAllMessages() {
+        return messageDAO.getAllMessages(); 
+    }
+    
     // Check Message object for valid account ID before fully creating 
     public Message createMessage(Message message) {
         if (accountDAO.getAccount(message.getPosted_by()) != null && message.getMessage_text().length() != 0) {
@@ -27,5 +33,9 @@ public class MessageService {
             return null; 
         }       
         
+    }
+
+    public Message getMessageById(int messageId) {
+        return messageDAO.getMessageById(messageId); 
     }
 }
