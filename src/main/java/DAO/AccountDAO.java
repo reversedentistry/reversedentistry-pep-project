@@ -4,8 +4,8 @@ import Model.Account;
 import Util.ConnectionUtil;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+// import java.util.ArrayList;
+// import java.util.List;
 
 public class AccountDAO {
     //Create new account
@@ -45,7 +45,26 @@ public class AccountDAO {
             }
         } catch(SQLException e){
             System.out.println(e.getMessage());
+        }
+        return null; 
     }
-    return null; 
+
+    public Account getUsername(String username) {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "SELECT * FROM account WHERE username = ?"; 
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                Account account = new Account(rs.getInt("account_id"),
+                        rs.getString("username"),
+                        rs.getString("password")); 
+                return account;
+            }
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null; 
     }
 }
