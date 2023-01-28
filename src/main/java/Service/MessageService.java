@@ -3,7 +3,7 @@ package Service;
 import DAO.MessageDAO;
 import DAO.AccountDAO;
 import Model.Message;
-import Model.Account;
+// import Model.Account;
 
 public class MessageService {
     public MessageDAO messageDAO; 
@@ -11,10 +11,12 @@ public class MessageService {
 
     public MessageService() {
         messageDAO = new MessageDAO(); 
+        accountDAO = new AccountDAO(); 
     }
 
-    public MessageService(MessageDAO messageDAO) {
+    public MessageService(MessageDAO messageDAO, AccountDAO accountDAO) {
         this.messageDAO = messageDAO; 
+        this.accountDAO = accountDAO; 
     }
 
     // Check Message object for valid account ID before fully creating 
