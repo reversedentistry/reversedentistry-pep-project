@@ -1,7 +1,8 @@
 package DAO; 
 
 import Model.Message; 
-import Util.ConnectionUtil; 
+import Util.ConnectionUtil;
+import net.bytebuddy.dynamic.scaffold.MethodRegistry.Prepared;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -64,5 +65,41 @@ public class MessageDAO {
             System.out.println(e.getMessage());
         }
         return null; 
+    }
+
+    public Message getMessagesByAccount(int accountId) {
+        Connection connection = ConnectionUtil.getConnection(); 
+        try {
+            String sql = "SELECT * FROM message WHERE posted_by = ?"; 
+            PreparedStatement preparedStatement = connection.prepareStatement(sql); 
+            preparedStatement.setInt(1, accountId); 
+            ResultSet rs = preparedStatement.executeQuery(); 
+            while (rs.next()) {
+                Message message = new Message(rs.getInt("message_id"),
+                rs.getInt("posted_by"),
+                        rs.getString("message_text"), 
+                        rs.getLong("time_posted_epoch")); 
+                return message;
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage()); 
+        }
+        return null; 
+    }
+
+    public void updateMessage(int id, Message message) {
+        Connection connection = ConnectionUtil.getConnection(); 
+        try {
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?"; 
+            PreparedStatement preparedStatement = connection.prepareStatement(sql); 
+
+            preparedStatement.setString(1, message.getMessage_text()); 
+            preparedStatement.setInt(2, id);
+
+            preparedStatement.executeUpdate(); 
+        } catch(SQLException e) {
+            System.out.println(e.getMessage()); 
+        }
     }
 }
