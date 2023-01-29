@@ -39,7 +39,7 @@ public class MessageService {
         return messageDAO.getMessageById(messageId); 
     }
 
-    public Message getMessagesByAccount(int accountId) {
+    public List<Message> getMessagesByAccount(int accountId) {
         return messageDAO.getMessagesByAccount(accountId); 
     }
 
