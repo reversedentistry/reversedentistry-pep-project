@@ -37,6 +37,8 @@ public class SocialMediaController {
         // app.post("/login", this::postLoginHandler); 
         app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);  
+        app.get("/messages/{message_id}", this::getMessageByIdHandler); 
+        app.patch("/messages/{message_id}", this::patchMessageHandler); 
         // app.start(8080); 
         return app;
     }
@@ -47,23 +49,6 @@ public class SocialMediaController {
      */
     private void exampleHandler(Context context) {
         context.json("sample text");
-    }
-
-    private void getAllMessagesHandler(Context ctx) {
-        List<Message> messages = messageService.getAllMessages(); 
-        ctx.json(messages); 
-    }
-    
-    private void postMessageHandler(Context ctx) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper(); 
-        Message message = mapper.readValue(ctx.body(), Message.class); 
-        Message newMessage = messageService.createMessage(message); 
-
-        if(newMessage != null){
-            ctx.json(mapper.writeValueAsString(newMessage));
-        }else{
-            ctx.status(400);
-        }
     }
 
     private void postAccountHandler(Context ctx) throws JsonProcessingException {
@@ -77,6 +62,44 @@ public class SocialMediaController {
             ctx.status(400); 
         }
     }
+    
+    private void getAllMessagesHandler(Context ctx) {
+        List<Message> messages = messageService.getAllMessages(); 
+        ctx.json(messages); 
+    }
+
+    private void getMessageByIdHandler(Context ctx) {
+        int messageId = Integer.parseInt(ctx.pathParam("message_id")); 
+        Message retrievedId = messageService.getMessageById(messageId); 
+        ctx.json(retrievedId); 
+    }; 
+    
+    private void postMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper(); 
+        Message message = mapper.readValue(ctx.body(), Message.class); 
+        Message newMessage = messageService.createMessage(message); 
+
+        if(newMessage != null){
+            ctx.json(mapper.writeValueAsString(newMessage));
+        }else{
+            ctx.status(400);
+        }
+    }
+
+    private void patchMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper(); 
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        int message_id = Integer.parseInt(ctx.pathParam("message_id")); 
+        Message updatedMessage = messageService.updateMessage(message_id, message); 
+        System.out.println(updatedMessage); 
+        if (updatedMessage == null) {
+            ctx.status(400); 
+        } else {
+            ctx.json(mapper.writeValueAsString(updatedMessage)); 
+        }
+    }    
+
+    
 
 
 }
