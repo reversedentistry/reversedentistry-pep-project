@@ -38,4 +38,17 @@ public class MessageService {
     public Message getMessageById(int messageId) {
         return messageDAO.getMessageById(messageId); 
     }
+
+    public Message getMessagesByAccount(int accountId) {
+        return messageDAO.getMessagesByAccount(accountId); 
+    }
+
+    public Message updateMessage(int messageId, Message message) {
+        if (messageDAO.getMessageById(messageId) != null) {
+            messageDAO.updateMessage(messageId, message);
+            return messageDAO.getMessageById(messageId);
+        } else {
+            return null; 
+        }
+    }
 }
