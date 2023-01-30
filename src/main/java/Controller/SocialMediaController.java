@@ -38,8 +38,9 @@ public class SocialMediaController {
         app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);  
         app.get("/messages/{message_id}", this::getMessageByIdHandler); 
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesByAccountHandler); 
         app.patch("/messages/{message_id}", this::patchMessageHandler); 
-        // app.start(8080); 
+        app.delete("/messages/{message_id}", this::deleteMessageHandler); 
         return app;
     }
 
@@ -63,8 +64,16 @@ public class SocialMediaController {
         }
     }
     
+    // private void postLoginHandler()
+
     private void getAllMessagesHandler(Context ctx) {
         List<Message> messages = messageService.getAllMessages(); 
+        ctx.json(messages); 
+    }
+
+    private void getAllMessagesByAccountHandler(Context ctx) {
+        int accountId = Integer.parseInt(ctx.pathParam("account_id")); 
+        List<Message> messages = messageService.getMessagesByAccount(accountId); 
         ctx.json(messages); 
     }
 
@@ -99,7 +108,13 @@ public class SocialMediaController {
         }
     }    
 
-    
+    private void deleteMessageHandler(Context ctx) {
+        int messageId = Integer.parseInt(ctx.pathParam("message_id")); 
+        Message deletedMessage = messageService.deleteMessage(messageId); 
+        if (deletedMessage != null) {
+            ctx.json(deletedMessage);
+        } 
+    }   
 
 
 }

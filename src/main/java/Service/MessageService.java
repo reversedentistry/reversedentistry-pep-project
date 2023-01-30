@@ -3,7 +3,6 @@ package Service;
 import DAO.MessageDAO;
 import DAO.AccountDAO;
 import Model.Message;
-// import Model.Account;
 
 import java.util.List;
 
@@ -49,6 +48,16 @@ public class MessageService {
             return messageDAO.getMessageById(messageId);
         } else {
             return null; 
+        }
+    }
+
+    public Message deleteMessage (int messageId) {
+        if (messageDAO.getMessageById(messageId) != null) {
+            Message deletedMessage = messageDAO.getMessageById(messageId);
+            messageDAO.deleteMessage(messageId);
+            return deletedMessage; 
+        } else {
+            return null;
         }
     }
 }
