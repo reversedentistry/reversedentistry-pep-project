@@ -21,4 +21,8 @@ public class AccountService {
             return null; 
         }
     }
+
+    public Account loginAccount(Account account) {
+        return accountDAO.checkExistingAccount(account);
+    }
 }
