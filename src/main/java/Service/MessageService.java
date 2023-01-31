@@ -40,11 +40,8 @@ public class MessageService {
 
     //Retrieves all messages of a specified account given it exists
     public List<Message> getMessagesByAccount(int accountId) {
-        if (accountDAO.getAccount(accountId) != null) {
-            return messageDAO.getMessagesByAccount(accountId); 
-        } else {
-            return null; 
-        }
+           return messageDAO.getMessagesByAccount(accountId); 
+        
     }
 
     //Edits an existing message after checking for existing ID and appropriate text length

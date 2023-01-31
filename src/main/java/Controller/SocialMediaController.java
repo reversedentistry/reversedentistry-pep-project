@@ -81,7 +81,10 @@ public class SocialMediaController {
     private void getAllMessagesByAccountHandler(Context ctx) {
         int accountId = Integer.parseInt(ctx.pathParam("account_id")); 
         List<Message> messages = messageService.getMessagesByAccount(accountId); 
-        ctx.json(messages); 
+        if (messages != null) {
+            ctx.json(messages);
+        } 
+        
     }
 
     //Retrieves a message by its ID
