@@ -35,7 +35,11 @@ public class MessageService {
     }
 
     public Message getMessageById(int messageId) {
-        return messageDAO.getMessageById(messageId); 
+        if (messageDAO.getMessageById(messageId) == null) {
+            return null;
+        } else {
+            return messageDAO.getMessageById(messageId); 
+        }
     }
 
     public List<Message> getMessagesByAccount(int accountId) {
