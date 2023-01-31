@@ -4,11 +4,11 @@ import Model.Account;
 import Util.ConnectionUtil;
 
 import java.sql.*;
-// import java.util.ArrayList;
-// import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDAO {
-    //Create new account
+    //Inserts new account into table
     public Account createAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection(); 
         try {
@@ -29,7 +29,7 @@ public class AccountDAO {
         return null; 
     }
 
-    // Retrieve account by ID
+    //Retrieves an account from table by its ID - used in MessageService
     public Account getAccount(int accountId) {
         Connection connection = ConnectionUtil.getConnection();
         try {
@@ -49,7 +49,25 @@ public class AccountDAO {
         return null; 
     }
 
-    public Account getUsername(String username) {
+    public List<Account> getAllAccounts() {
+        Connection connection = ConnectionUtil.getConnection(); 
+        List<Account> accounts = new ArrayList<>(); 
+        try {
+            String sql = "SELECT * FROM account"; 
+            PreparedStatement preparedStatement = connection.prepareStatement(sql); 
+            ResultSet rs = preparedStatement.executeQuery(); 
+            while (rs.next()) {
+                Account account = new Account(rs.getInt("account_id"), rs.getString("username"), rs.getString("password")); 
+                accounts.add(account); 
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage()); 
+        }
+        return accounts; 
+    }
+
+    // Checks table for specified username
+    public Account verifyUsername(String username) {
         Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "SELECT * FROM account WHERE username = ?"; 
@@ -68,6 +86,7 @@ public class AccountDAO {
         return null; 
     }
 
+    // Retrieves all records given an existing user 
     public Account checkExistingAccount(Account login) {
         Connection connection = ConnectionUtil.getConnection();
         try {
