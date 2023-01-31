@@ -90,8 +90,9 @@ public class SocialMediaController {
         Message retrievedId = messageService.getMessageById(messageId); 
         if (retrievedId != null) {
             ctx.json(retrievedId); 
+        } else {
+            ctx.status(200); 
         }
-        
     }; 
     
     //Create a new message
