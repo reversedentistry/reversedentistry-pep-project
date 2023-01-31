@@ -32,9 +32,9 @@ public class SocialMediaController {
 
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        app.get("example-endpoint", this::exampleHandler);
         app.post("/register", this::postAccountHandler);
         app.post("/login", this::postLoginHandler); 
+        app.get("/accounts", this::getAllAccountsHandler); 
         app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);  
         app.get("/messages/{message_id}", this::getMessageByIdHandler); 
@@ -48,10 +48,11 @@ public class SocialMediaController {
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
-    }
+    // private void exampleHandler(Context context) {
+    //     context.json("sample text");
+    // }
 
+    //Endpoint to create new accounts
     private void postAccountHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper(); 
         Account account = mapper.readValue(ctx.body(), Account.class); 
@@ -64,6 +65,7 @@ public class SocialMediaController {
         }
     }
     
+    //Endpoint to verify account credentials and login
     private void postLoginHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account loginCreds = mapper.readValue(ctx.body(), Account.class);
@@ -76,17 +78,26 @@ public class SocialMediaController {
         }
     }
 
-    private void getAllMessagesHandler(Context ctx) {
-        List<Message> messages = messageService.getAllMessages(); 
-        ctx.json(messages); 
+    //Retrieves all accounts (for testing purposes)
+    private void getAllAccountsHandler(Context ctx) {
+        List<Account> allAccounts = accountService.getAllAccounts(); 
+        ctx.json(allAccounts); 
     }
 
+    //Retrieves all messages
+    private void getAllMessagesHandler(Context ctx) {
+        List<Message> allMessages = messageService.getAllMessages(); 
+        ctx.json(allMessages); 
+    }
+
+    //Retrieves all messages of a specified user
     private void getAllMessagesByAccountHandler(Context ctx) {
         int accountId = Integer.parseInt(ctx.pathParam("account_id")); 
         List<Message> messages = messageService.getMessagesByAccount(accountId); 
         ctx.json(messages); 
     }
 
+    //Retrieves a message by its ID
     private void getMessageByIdHandler(Context ctx) {
         int messageId = Integer.parseInt(ctx.pathParam("message_id")); 
         Message retrievedId = messageService.getMessageById(messageId); 
@@ -96,6 +107,7 @@ public class SocialMediaController {
         
     }; 
     
+    //Create a new message
     private void postMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper(); 
         Message message = mapper.readValue(ctx.body(), Message.class); 
@@ -108,6 +120,7 @@ public class SocialMediaController {
         }
     }
 
+    //Edits text of a message
     private void patchMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper(); 
         Message message = mapper.readValue(ctx.body(), Message.class);
@@ -121,6 +134,7 @@ public class SocialMediaController {
         }
     }    
 
+    //Deletes a message 
     private void deleteMessageHandler(Context ctx) {
         int messageId = Integer.parseInt(ctx.pathParam("message_id")); 
         Message deletedMessage = messageService.deleteMessage(messageId); 
