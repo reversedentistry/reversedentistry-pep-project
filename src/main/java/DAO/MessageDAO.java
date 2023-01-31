@@ -2,13 +2,13 @@ package DAO;
 
 import Model.Message; 
 import Util.ConnectionUtil;
-import net.bytebuddy.dynamic.scaffold.MethodRegistry.Prepared;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDAO {
+    //Inserts new message into table
     public Message createMessage(Message message) {
         Connection connection = ConnectionUtil.getConnection(); 
         try {
@@ -47,6 +47,7 @@ public class MessageDAO {
         return messages; 
     }
 
+    //Retrieves a message given an ID if it exists
     public Message getMessageById(int messageId) {
         Connection connection = ConnectionUtil.getConnection();
         try {
@@ -67,6 +68,7 @@ public class MessageDAO {
         return null; 
     }
 
+    // Retrieves all messages posted by a specified account ID
     public List<Message> getMessagesByAccount(int accountId) {
         Connection connection = ConnectionUtil.getConnection(); 
         List<Message> messages = new ArrayList<>(); 
@@ -89,6 +91,7 @@ public class MessageDAO {
         return messages; 
     }
 
+    //Updates only message text 
     public void updateMessage(int id, Message message) {
         Connection connection = ConnectionUtil.getConnection(); 
         try {
